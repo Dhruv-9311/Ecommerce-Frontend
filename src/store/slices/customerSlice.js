@@ -25,18 +25,22 @@ export const fetchPublicProducts = createAsyncThunk("customer/fetchPublicProduct
 });
 
 export const fetchCustomerProducts = createAsyncThunk('customer/fetchCustomerData',
-    async () => {
-      const token = localStorage.getItem("token");
-      const response = await fetch('https://ecommerce-backend-6z5x.vercel.app/api/customer/data', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const body = await response.json();
-      if (response.status === 200) {
-        return body;
-      } else {
-        throw new Error(body.error);
+    async (_, { rejectWithValue }) => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch('https://ecommerce-backend-6z5x.vercel.app/api/customer/data', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const body = await response.json();
+        if (response.ok) {
+          return body;
+        } else {
+          return rejectWithValue(body?.message || body?.error || "Failed to fetch customer data");
+        }
+      } catch (error) {
+        return rejectWithValue("Network error. Please check your connection.");
       }
     }
   );
@@ -126,7 +130,7 @@ const customerSlice = createSlice({
         })
         .addCase(fetchCustomerProducts.rejected, (state, action) => {
           state.isLoading = false;
-          state.error = action.payload || "Failed to fetch products";
+          state.error = action.payload || action.error?.message || "Failed to fetch customer data";
         })
         .addCase(addToCart.fulfilled,(state,action)=>{
           state.cart = action.payload
