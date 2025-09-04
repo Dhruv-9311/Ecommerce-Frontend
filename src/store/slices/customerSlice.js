@@ -8,19 +8,41 @@ const initialState = {
     error: null,
 }
 
-export const fetchCustomerProducts = createAsyncThunk("customer/fetchCustomerData", async () => {
-  const token = localStorage.getItem("token");
-  const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/customer/data", {
-    headers: {
-      "Authorization": `Bearer ${token}`,
-    },
-  });
-  const body = await response.json();
-  if (!response.ok) {
-    throw new Error(body?.message || "Failed to fetch products");
+// Public products fetch - no authentication required
+export const fetchPublicProducts = createAsyncThunk("customer/fetchPublicProducts", async (_, { rejectWithValue }) => {
+  try {
+    const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/customer/products");
+    const body = await response.json();
+    
+    if (!response.ok) {
+      return rejectWithValue(body?.message || "Failed to fetch products");
+    }
+    
+    return body;
+  } catch (error) {
+    return rejectWithValue("Network error. Please check your connection.");
   }
-  return body;
 });
+
+export const fetchCustomerProducts = createAsyncThunk('customer/fetchCustomerData',
+    async () => {
+      const token = localStorage.getItem("token");
+      const response = await fetch('https://ecommerce-backend-6z5x.vercel.app/api/customer/data', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const body = await response.json();
+      if (response.status === 200) {
+        return body;
+      } else {
+        throw new Error(body.error);
+      }
+    }
+  );
+
+
+
 
 export const addToCart = createAsyncThunk("customer/addToCart", async (productId) => {
   const token = localStorage.getItem("token");
@@ -77,6 +99,20 @@ const customerSlice = createSlice({
     },
     extraReducers: (builder) => {
       builder
+        // Public products (no auth required)
+        .addCase(fetchPublicProducts.pending, (state) => {
+          state.isLoading = true;
+          state.error = null;
+        })
+        .addCase(fetchPublicProducts.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.products = action.payload.products;
+        })
+        .addCase(fetchPublicProducts.rejected, (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload || "Failed to fetch products";
+        })
+        // Authenticated customer data
         .addCase(fetchCustomerProducts.pending, (state) => {
           state.isLoading = true;
           state.error = null;
@@ -106,3 +142,20 @@ const customerSlice = createSlice({
 });
 
 export default customerSlice.reducer;
+
+// export const fetchCustomerData = createAsyncThunk('customer/fetchCustomerData',
+//   async () => {
+//     const token = localStorage.getItem("token");
+//     const response = await fetch('https://ecommerce-backend-6z5x.vercel.app/api/customer/data', {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     const body = await response.json();
+//     if (response.status === 200) {
+//       return body;
+//     } else {
+//       throw new Error(body.error);
+//     }
+//   }
+// );

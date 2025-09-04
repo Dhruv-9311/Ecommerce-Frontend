@@ -3,21 +3,37 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import CustomerProduct from './CustomerProduct'
 
-import { fetchCustomerProducts, addToCart, removeFromCart } from '../../store/slices/customerSlice'
+import { fetchPublicProducts, fetchCustomerProducts, addToCart, removeFromCart } from '../../store/slices/customerSlice'
 
 const customerHome = () => {
 
   const {products, cart, isLoading, error} = useSelector((state) => state.customer);
+  const { isLoggedIn } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  
   useEffect(() => {
-  dispatch(fetchCustomerProducts());
-}, [dispatch]);
+    if (isLoggedIn) {
+      // If logged in, fetch full customer data (products + cart + orders)
+      dispatch(fetchCustomerProducts());
+    } else {
+      // If not logged in, fetch only public products
+      dispatch(fetchPublicProducts());
+    }
+  }, [dispatch, isLoggedIn]);
 
 const handleAddToCart = (productId) => {
+  if (!isLoggedIn) {
+    alert("Please log in to add items to cart");
+    return;
+  }
   dispatch(addToCart(productId));
 }
 
 const handleRemoveFromCart = (productId) => {
+  if (!isLoggedIn) {
+    alert("Please log in to manage your cart");
+    return;
+  }
   dispatch(removeFromCart(productId));
 }
 
