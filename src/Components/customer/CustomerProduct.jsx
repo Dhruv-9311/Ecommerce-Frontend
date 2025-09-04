@@ -11,7 +11,7 @@ const CustomerProduct = ({ product, cart = [], handleAddToCart, handleRemoveFrom
       {product.imageUrl && (
         <div className="h-56 bg-gray-50 flex items-center justify-center">
           <img
-            src={`http://localhost:3000/${product.imageUrl}`}
+            src={`https://ecommerce-backend-6z5x.vercel.app/${product.imageUrl}`}
             alt={product?.name}
             className="max-h-full max-w-full object-contain"
           />

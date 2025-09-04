@@ -25,7 +25,7 @@ const AddProduct = () => {
     formData.append("rating",ratingRef.current.value);
     formData.append("image",imageRef.current.files[0]);
     
-    fetch("http://localhost:3000/api/seller/products",{
+    fetch("https://ecommerce-backend-6z5x.vercel.app/api/seller/products",{
       method: "POST",
       body: formData,
       headers: {

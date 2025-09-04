@@ -15,7 +15,7 @@ const sellerHome = () => {
 
 const handleDeleteProduct = async(productId)=> {
   const token = localStorage.getItem("token")
-  const response = await fetch(`http://localhost:3000/api/seller/products/${productId}`,{
+  const response = await fetch(`https://ecommerce-backend-6z5x.vercel.app/api/seller/products/${productId}`,{
     method: "DELETE",
     
     headers: {

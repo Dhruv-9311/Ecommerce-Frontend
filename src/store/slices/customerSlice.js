@@ -10,7 +10,7 @@ const initialState = {
 
 export const fetchCustomerProducts = createAsyncThunk("customer/fetchCustomerData", async () => {
   const token = localStorage.getItem("token");
-  const response = await fetch("http://localhost:3000/api/customer/data", {
+  const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/customer/data", {
     headers: {
       "Authorization": `Bearer ${token}`,
     },
@@ -24,7 +24,7 @@ export const fetchCustomerProducts = createAsyncThunk("customer/fetchCustomerDat
 
 export const addToCart = createAsyncThunk("customer/addToCart", async (productId) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`http://localhost:3000/api/customer/cart/${productId}`, {
+  const response = await fetch(`https://ecommerce-backend-6z5x.vercel.app/api/customer/cart/${productId}`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -40,7 +40,7 @@ export const addToCart = createAsyncThunk("customer/addToCart", async (productId
 
 export const removeFromCart = createAsyncThunk("customer/removeFromCart", async (productId) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`http://localhost:3000/api/customer/cart/${productId}`, {
+  const response = await fetch(`https://ecommerce-backend-6z5x.vercel.app/api/customer/cart/${productId}`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -56,7 +56,7 @@ export const removeFromCart = createAsyncThunk("customer/removeFromCart", async 
 
 export const createOrder = createAsyncThunk("customer/createOrder", async (order) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`http://localhost:3000/api/customer/order`, {
+  const response = await fetch(`https://ecommerce-backend-6z5x.vercel.app/api/customer/order`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,

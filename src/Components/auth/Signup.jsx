@@ -18,7 +18,7 @@ const Signup = () => {
     setErrors({});
     setIsLoading(true);
     
-    fetch("http://localhost:3000/api/auth/signup",{
+    fetch("https://ecommerce-backend-6z5x.vercel.app/api/auth/signup",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json',
