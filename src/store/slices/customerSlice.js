@@ -11,7 +11,7 @@ const initialState = {
 // Public products fetch - no authentication required
 export const fetchPublicProducts = createAsyncThunk("customer/fetchPublicProducts", async (_, { rejectWithValue }) => {
   try {
-    const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/customer/products");
+    const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/public/products");
     const body = await response.json();
     
     if (!response.ok) {
