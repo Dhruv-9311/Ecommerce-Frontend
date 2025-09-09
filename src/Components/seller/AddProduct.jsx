@@ -14,34 +14,88 @@ const AddProduct = () => {
   const navigate = useNavigate()
   const { token } = useSelector((state) => state.auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name",nameRef.current.value);
-    formData.append("brand",brandRef.current.value);
-    formData.append("description",descRef.current.value);
-    formData.append("price",priceRef.current.value);
-    formData.append("category",categoryRef.current.value);
-    formData.append("rating",ratingRef.current.value);
-    formData.append("image",imageRef.current.files[0]);
     
-    fetch("https://ecommerce-backend-6z5x.vercel.app/api/seller/products",{
-      method: "POST",
-      body: formData,
-      headers: {
-        'Authorization': `Bearer ${token}`
+    // Validation
+    if (!nameRef.current?.value?.trim()) {
+      alert("Product name is required");
+      return;
+    }
+    if (!brandRef.current?.value?.trim()) {
+      alert("Brand name is required");
+      return;
+    }
+    if (!descRef.current?.value?.trim()) {
+      alert("Description is required");
+      return;
+    }
+    if (!priceRef.current?.value || parseFloat(priceRef.current.value) <= 0) {
+      alert("Valid price is required");
+      return;
+    }
+    if (!categoryRef.current?.value?.trim()) {
+      alert("Category is required");
+      return;
+    }
+    if (!ratingRef.current?.value || parseFloat(ratingRef.current.value) < 0 || parseFloat(ratingRef.current.value) > 5) {
+      alert("Rating must be between 0 and 5");
+      return;
+    }
+    if (!imageRef.current?.files?.[0]) {
+      alert("Product image is required");
+      return;
+    }
+    
+    const formData = new FormData();
+    formData.append("name", nameRef.current.value.trim());
+    formData.append("brand", brandRef.current.value.trim());
+    formData.append("description", descRef.current.value.trim());
+    formData.append("price", priceRef.current.value);
+    formData.append("category", categoryRef.current.value.trim());
+    formData.append("rating", ratingRef.current.value);
+    formData.append("image", imageRef.current.files[0]);
+    
+    try {
+      const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/seller/products", {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      const contentType = response.headers.get("content-type");
+      if (!contentType?.includes("application/json")) {
+        const textResponse = await response.text();
+        console.error("Non-JSON response:", textResponse);
+        throw new Error("Server returned an invalid response. Please check your authentication.");
       }
-    })
-    .then(response => response.json())
-    .then(data => {
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+      }
+      
       console.log("Success:", data);
-      // Clear form after successful submission
-      e.target.reset();
+      alert("Product added successfully!");
+      
+      // Clear form safely
+      nameRef.current.value = "";
+      brandRef.current.value = "";
+      descRef.current.value = "";
+      priceRef.current.value = "";
+      categoryRef.current.value = "";
+      ratingRef.current.value = "";
+      imageRef.current.value = "";
+      
       navigate("/");
-    })
-    .catch(error => {
+      
+    } catch (error) {
       console.error("Error:", error);
-    });
+      alert(`Error adding product: ${error.message}`);
+    }
   }
 
   return (
