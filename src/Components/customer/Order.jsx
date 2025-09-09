@@ -21,7 +21,7 @@ const Order = ({order, products}) => {
           {productsInOrder.map((product) => (
             <div key={product._id} className="flex items-center space-x-3">
               <img 
-                src={`https://ecommerce-backend-6z5x.vercel.app/${product.imageUrl}`}
+                src={`https://completebazaar-backend.onrender.com/${product.imageUrl}`}
                 alt={product.name}
                 className="w-12 h-12 object-cover rounded"
               />

@@ -19,7 +19,7 @@ const Login = () => {
     setErrors({});
     setIsLoading(true);
     
-    fetch("https://ecommerce-backend-6z5x.vercel.app/api/auth/login",{
+    fetch("https://completebazaar-backend.onrender.com/api/auth/login",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

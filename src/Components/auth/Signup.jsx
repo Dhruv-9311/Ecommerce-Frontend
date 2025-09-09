@@ -18,7 +18,7 @@ const Signup = () => {
     setErrors({});
     setIsLoading(true);
     
-    fetch("https://ecommerce-backend-6z5x.vercel.app/api/auth/signup",{
+    fetch("https://completebazaar-backend.onrender.com/api/auth/signup",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json',

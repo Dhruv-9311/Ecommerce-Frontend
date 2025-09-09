@@ -11,7 +11,7 @@ const initialState = {
 // Public products fetch - no authentication required
 export const fetchPublicProducts = createAsyncThunk("customer/fetchPublicProducts", async (_, { rejectWithValue }) => {
   try {
-    const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/public/products");
+    const response = await fetch("https://completebazaar-backend.onrender.com/api/public/products");
     const body = await response.json();
     
     if (!response.ok) {
@@ -28,7 +28,7 @@ export const fetchCustomerProducts = createAsyncThunk('customer/fetchCustomerDat
     async (_, { rejectWithValue }) => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch('https://ecommerce-backend-6z5x.vercel.app/api/customer/data', {
+        const response = await fetch('https://completebazaar-backend.onrender.com/api/customer/data', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -50,7 +50,7 @@ export const fetchCustomerProducts = createAsyncThunk('customer/fetchCustomerDat
 
 export const addToCart = createAsyncThunk("customer/addToCart", async (productId) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`https://ecommerce-backend-6z5x.vercel.app/api/customer/cart/${productId}`, {
+  const response = await fetch(`https://completebazaar-backend.onrender.com/api/customer/cart/${productId}`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -66,7 +66,7 @@ export const addToCart = createAsyncThunk("customer/addToCart", async (productId
 
 export const removeFromCart = createAsyncThunk("customer/removeFromCart", async (productId) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`https://ecommerce-backend-6z5x.vercel.app/api/customer/cart/${productId}`, {
+  const response = await fetch(`https://completebazaar-backend.onrender.com/api/customer/cart/${productId}`, {
     method: "DELETE",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -82,7 +82,7 @@ export const removeFromCart = createAsyncThunk("customer/removeFromCart", async 
 
 export const createOrder = createAsyncThunk("customer/createOrder", async (order) => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`https://ecommerce-backend-6z5x.vercel.app/api/customer/order`, {
+  const response = await fetch(`https://completebazaar-backend.onrender.com/api/customer/order`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -150,7 +150,7 @@ export default customerSlice.reducer;
 // export const fetchCustomerData = createAsyncThunk('customer/fetchCustomerData',
 //   async () => {
 //     const token = localStorage.getItem("token");
-//     const response = await fetch('https://ecommerce-backend-6z5x.vercel.app/api/customer/data', {
+//     const response = await fetch('https://completebazaar-backend.onrender.com/api/customer/data', {
 //       headers: {
 //         Authorization: `Bearer ${token}`,
 //       },

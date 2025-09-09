@@ -60,7 +60,7 @@ const AddProduct = () => {
       console.log("Token being sent:", token ? "Token exists" : "No token");
       console.log("Token length:", token?.length);
       
-      const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/seller/products", {
+      const response = await fetch("https://completebazaar-backend.onrender.com/api/seller/products", {
         method: "POST",
         body: formData,
         headers: {

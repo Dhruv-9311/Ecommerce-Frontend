@@ -12,7 +12,7 @@ const CartProduct = ({ product,handleRemoveFromCart }) => {
       <div className="flex-none w-24 h-24 bg-gray-50 rounded-md flex items-center justify-center overflow-hidden">
         {product.imageUrl && (
           <img
-            src={`https://ecommerce-backend-6z5x.vercel.app/${product.imageUrl}`}
+            src={`https://completebazaar-backend.onrender.com/${product.imageUrl}`}
             alt={product?.name}
             className="max-h-full max-w-full object-contain"
           />
