@@ -57,6 +57,9 @@ const AddProduct = () => {
     formData.append("image", imageRef.current.files[0]);
     
     try {
+      console.log("Token being sent:", token ? "Token exists" : "No token");
+      console.log("Token length:", token?.length);
+      
       const response = await fetch("https://ecommerce-backend-6z5x.vercel.app/api/seller/products", {
         method: "POST",
         body: formData,
@@ -65,11 +68,24 @@ const AddProduct = () => {
         }
       });
       
+      console.log("Response status:", response.status);
+      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
+      
       const contentType = response.headers.get("content-type");
       if (!contentType?.includes("application/json")) {
         const textResponse = await response.text();
         console.error("Non-JSON response:", textResponse);
-        throw new Error("Server returned an invalid response. Please check your authentication.");
+        console.error("Response status was:", response.status);
+        
+        if (response.status === 401) {
+          throw new Error("Authentication failed. Please login again.");
+        } else if (response.status === 403) {
+          throw new Error("Access denied. You need seller permissions.");
+        } else if (response.status === 500) {
+          throw new Error("Server error. Please try again later.");
+        } else {
+          throw new Error(`Server error (${response.status}). Response: ${textResponse.substring(0, 200)}`);
+        }
       }
       
       const data = await response.json();
